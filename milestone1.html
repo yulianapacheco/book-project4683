@@ -5,79 +5,74 @@
   <title>Milestone 1</title>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9f9f9;
-      margin: 20px;
-      padding: 0;
-      color: #333;
-    }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f3f0f8;
+    margin: 20px;
+    padding: 0;
+    color: #3c2a4d;
+  }
 
-    h1, h2 {
-      text-align: center;
-      color: #222;
-    }
+  h1, h2 {
+    text-align: center;
+    color: #4b0082; /* Deep purple */
+  }
 
-    .content {
-      max-width: 900px;
-      margin: 0 auto 40px;
-      background: white;
-      padding: 20px 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
-    }
+  .content {
+    max-width: 900px;
+    margin: 0 auto 40px;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(75, 0, 130, 0.1); /* subtle purple shadow */
+  }
 
-    /* Single book style */
-    #single-book {
-      margin-bottom: 40px;
-    }
+  #single-book {
+    margin-bottom: 40px;
+  }
 
-    #single-book h2 {
-      margin-bottom: 15px;
-      border-bottom: 2px solid #007bff;
-      padding-bottom: 8px;
-    }
+  #single-book h2,
+  #book-list h2 {
+    margin-bottom: 15px;
+    border-bottom: 2px solid #a64ca6; /* softer purple */
+    padding-bottom: 8px;
+  }
 
-    /* Book list style */
-    #book-list h2 {
-      margin-bottom: 15px;
-      border-bottom: 2px solid #007bff;
-      padding-bottom: 8px;
-    }
+  #book-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
 
-    #book-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-    }
+  .book {
+    background: #fff0ff;
+    border: 1px solid #d4a5d4;
+    border-radius: 10px;
+    padding: 15px;
+    width: 220px;
+    box-shadow: 1px 2px 6px rgba(160, 82, 160, 0.15);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+  }
 
-    .book {
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 15px;
-      width: 220px;
-      box-shadow: 1px 2px 6px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease-in-out;
-    }
+  .book:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(160, 82, 160, 0.3);
+  }
 
-    .book:hover {
-      transform: scale(1.03);
-    }
+  .book h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    color: #800080;
+  }
 
-    .book h3 {
-      margin: 0 0 8px 0;
-      font-size: 18px;
-      color: #007bff;
-    }
+  .book p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #4d2d52;
+  }
+</style>
 
-    .book p {
-      margin: 5px 0;
-      font-size: 14px;
-      color: #444;
-    }
-  </style>
 </head>
 <body>
 
