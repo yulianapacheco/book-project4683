@@ -1,22 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>title</title>
+  <meta charset="UTF-8" />
+  <title>Book Explorer Project</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Comfortaa', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f3f0f8;
+      color: #3c2a4d;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #4b0082;
+      margin-bottom: 10px;
+    }
+
+    .info-box {
+      background-color: #fff0ff;
+      border: 1px solid #d4a5d4;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 500px;
+      box-shadow: 0 2px 10px rgba(160, 82, 160, 0.15);
+      font-size: 1.2em;
+    }
+
+    a {
+      color: #800080;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .milestone-table {
+      margin: 30px auto;
+      border-collapse: collapse;
+      width: 80%;
+      max-width: 700px;
+    }
+
+    .milestone-table th,
+    .milestone-table td {
+      border: 1px solid #d4a5d4;
+      padding: 12px;
+      font-size: 1em;
+    }
+
+    .milestone-table th {
+      background-color: #e9d8f7;
+      color: #4b0082;
+    }
+
+    .milestone-table td a {
+      display: block;
+      color: #4b0082;
+    }
+
+  </style>
 </head>
 <body>
-    <h1>Book Explorer Project</h1>
-<p>By Yuliana Pacheco | Information Technology, KSU</p>
 
-<a href="http://ccse.kennesaw.edu/it" target="_blank">KSU IT Department</a>
+  <h1>Book Explorer Project</h1>
 
-<ul>
-  <li><a href="milestone1.html">Milestone 1: JSON Display</a></li>
-  <li><a href="milestone2.html">Milestone 2: Google Books</a></li>
-  <li><a href="milestone3.html">Milestone 3: Book Search AJAX</a></li>
-  <li><a href="milestone4.html">Milestone 4: Improved SPA</a></li>
-</ul>
+  <div class="info-box">
+    <p><strong>Yuliana Pacheco</strong></p>
+    <p>Information Technology, KSU</p>
+  </div>
 
+  <p><a href="http://ccse.kennesaw.edu/it" target="_blank">KSU IT Department</a></p>
+
+  <table class="milestone-table">
+    <thead>
+      <tr>
+        <th>Milestone</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="milestone1.html">Milestone 1</a></td>
+        <td>JSON Display</td>
+      </tr>
+      <tr>
+        <td><a href="milestone2.html">Milestone 2</a></td>
+        <td>Google Books</td>
+      </tr>
+      <tr>
+        <td><a href="milestone3.html">Milestone 3</a></td>
+        <td>Book Search AJAX</td>
+      </tr>
+      <tr>
+        <td><a href="milestone4.html">Milestone 4</a></td>
+        <td>Improved SPA</td>
+      </tr>
+    </tbody>
+  </table>
 
 </body>
 </html>
