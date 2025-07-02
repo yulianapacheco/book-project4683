@@ -7,14 +7,16 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
     $(function () {
-      
+      // Your actual Google Books user ID
       const userId = "113973117465265140289";
-      const shelfId = "1001";
 
-      // Construct API URL to get books from my public shelf
+      // Use shelf ID 0 for the "Favorites" shelf
+      const shelfId = "0";
+
+      // Construct the API URL to fetch volumes from your shelf
       const url = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes`;
 
-      // Get books and display them
+      // Fetch books and display them on the page
       $.getJSON(url, function (data) {
         const books = data.items || [];
 
@@ -23,7 +25,7 @@
           return;
         }
 
-        // Display each book with title + thumbnail + link
+        // Loop through each book and display thumbnail + title with link
         books.forEach(book => {
           const info = book.volumeInfo;
           const title = info.title || "No title";
@@ -43,7 +45,7 @@
 </head>
 
 <body>
-  <!-- Nav links to other pages -->
+  <!-- Top navigation links -->
   <header>
     <nav>
       <a href="../index.html">Main Home</a> |
@@ -52,10 +54,10 @@
     </nav>
   </header>
 
+  <!-- Bookshelf content -->
   <main>
     <h1>My Bookshelf</h1>
     <div id="shelf"></div>
   </main>
 </body>
 </html>
-
