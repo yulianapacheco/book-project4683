@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>My Bookshelf</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
     $(function () {
-      // Replace these with your actual user and shelf IDs
+      
       const userId = "113973117465265140289";
       const shelfId = "1001";
 
-
-      // Construct API URL to get books from your public shelf
+      // Construct API URL to get books from my public shelf
       const url = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes`;
 
       // Get books and display them
@@ -33,7 +32,7 @@
 
           $('#shelf').append(`
             <div class="book">
-              <img src="${thumbnail}" alt="Cover">
+              <img src="${thumbnail}" alt="Cover" />
               <a href="details.html?bookId=${id}">${title}</a>
             </div>
           `);
@@ -59,3 +58,4 @@
   </main>
 </body>
 </html>
+
