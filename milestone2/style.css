@@ -1,0 +1,77 @@
+/* General Page Styling */
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: #f0f6ff;
+  color: #1a1a1a;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Navigation */
+nav {
+  background-color: #dceeff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+nav a {
+  color: #005a9e;
+  text-decoration: none;
+  margin-right: 15px;
+  font-weight: 500;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Page Title */
+h1 {
+  color: #003d66;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Bookshelf Layout */
+#shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+/* Individual Book Card */
+.book {
+  background-color: #e8f1ff;
+  border: 1px solid #c4dcf7;
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 90, 158, 0.05);
+  transition: transform 0.2s;
+}
+
+.book:hover {
+  transform: scale(1.03);
+}
+
+/* Book Cover Image */
+.book img {
+  max-width: 100px;
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+/* Book Title Link */
+.book a {
+  display: block;
+  color: #004c99;
+  font-size: 0.95rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.book a:hover {
+  text-decoration: underline;
+}
