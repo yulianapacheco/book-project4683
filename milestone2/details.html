@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Details</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <script>
+    // Run when the page loads
+    $(function () {
+      // Grab the bookId from the URL parameters
+      const params = new URLSearchParams(window.location.search);
+      const bookId = params.get("bookId");
+
+      // If a book ID exists, fetch book details using Google Books API
+      if (bookId) {
+        const url = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
+
+        $.getJSON(url, function (data) {
+          const info = data.volumeInfo;
+          const sale = data.saleInfo;
+
+          // Build HTML with the book's details
+          $('#details').html(`
+            <h2>${info.title || "No title available"}</h2>
+            <p><strong>Authors:</strong> ${info.authors?.join(", ") || "N/A"}</p>
+            <p><strong>Publisher:</strong> ${info.publisher || "N/A"}</p>
+            <p><strong>Page Count:</strong> ${info.pageCount || "N/A"}</p>
+            <p><strong>Categories:</strong> ${info.categories?.join(", ") || "N/A"}</p>
+            <p><strong>Description:</strong> ${info.description || "No description available"}</p>
+            <p><strong>Price:</strong> ${sale.listPrice?.amount ? `$${sale.listPrice.amount}` : "Not for sale"}</p>
+            <img src="${info.imageLinks?.thumbnail || ''}" alt="Book cover">
+          `);
+        });
+      } else {
+        // If no ID in URL, show an error message
+        $('#details').html("<p>Error: No book ID found in the URL.</p>");
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <!-- Navigation menu -->
+  <header>
+    <nav>
+      <a href="../index.html">Main Home</a> |
+      <a href="index.html">Home (Search)</a> |
+      <a href="bookshelf.html">My Bookshelf</a>
+    </nav>
+  </header>
+
+  <!-- Page content -->
+  <main>
+    <h1>Book Details</h1>
+    <div id="details"></div> <!-- Where book info will be inserted -->
+  </main>
+</body>
+</html>
