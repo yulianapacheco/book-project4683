@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Bookshelf</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function () {
+      // Replace these with your actual user and shelf IDs
+      const userId = "113973117465265140289";
+      const shelfId = "1001";
+
+
+      // Construct API URL to get books from your public shelf
+      const url = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes`;
+
+      // Get books and display them
+      $.getJSON(url, function (data) {
+        const books = data.items || [];
+
+        if (books.length === 0) {
+          $('#shelf').html("<p>No books found in this shelf.</p>");
+          return;
+        }
+
+        // Display each book with title + thumbnail + link
+        books.forEach(book => {
+          const info = book.volumeInfo;
+          const title = info.title || "No title";
+          const thumbnail = info.imageLinks?.thumbnail || "";
+          const id = book.id;
+
+          $('#shelf').append(`
+            <div class="book">
+              <img src="${thumbnail}" alt="Cover">
+              <a href="details.html?bookId=${id}">${title}</a>
+            </div>
+          `);
+        });
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <!-- Nav links to other pages -->
+  <header>
+    <nav>
+      <a href="../index.html">Main Home</a> |
+      <a href="index.html">Home (Search)</a> |
+      <a href="bookshelf.html">My Bookshelf</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>My Bookshelf</h1>
+    <div id="shelf"></div>
+  </main>
+</body>
+</html>
