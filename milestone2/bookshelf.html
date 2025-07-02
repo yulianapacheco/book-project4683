@@ -7,13 +7,13 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
     $(function () {
-      // Your actual Google Books user ID
+      
       const userId = "113973117465265140289";
 
-      // Use shelf ID 0 for the "Favorites" shelf
+      
       const shelfId = "0";
 
-      // Construct the API URL to fetch volumes from your shelf
+      // Construct the API URL to fetch volumes
       const url = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes`;
 
       // Fetch books and display them on the page
