@@ -5,16 +5,14 @@
   <title>Book Search</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="script.js" defer></script>
 </head>
 <body>
   <header>
     <nav>
-  <a href="../index.html">Main Home</a> |
-  <a href="index.html">Home (Search)</a> |
-  <a href="bookshelf.html">My Bookshelf</a>
+      <a href="../index.html">Main Home</a> |
+      <a href="index.html">Home (Search)</a> |
+      <a href="bookshelf.html">My Bookshelf</a>
     </nav>
-
   </header>
 
   <main>
@@ -25,5 +23,98 @@
     <div id="pagination"></div>
     <div id="results"></div>
   </main>
+
+  <script>
+    const maxResults = 20;
+    let currentBooks = [];
+
+    // Mock book data (your 3 books)
+    const mockBooks = [
+      {
+        id: "1",
+        volumeInfo: {
+          title: "The Hunger Games: Catching Fire",
+          imageLinks: {
+            thumbnail: "https://covers.openlibrary.org/b/id/8372084-L.jpg"
+          }
+        }
+      },
+      {
+        id: "2",
+        volumeInfo: {
+          title: "To Selena, With Love",
+          imageLinks: {
+            thumbnail: "https://covers.openlibrary.org/b/id/10523333-L.jpg"
+          }
+        }
+      },
+      {
+        id: "3",
+        volumeInfo: {
+          title: "Pride and Prejudice",
+          imageLinks: {
+            thumbnail: "https://covers.openlibrary.org/b/id/8226191-L.jpg"
+          }
+        }
+      }
+    ];
+
+    $(function () {
+      $('#searchBtn').on('click', function () {
+        const term = $('#searchTerm').val().trim().toLowerCase();
+        if (term) {
+          const filtered = mockBooks.filter(book =>
+            book.volumeInfo.title.toLowerCase().includes(term)
+          );
+
+          currentBooks = filtered;
+          if (currentBooks.length === 0) {
+            $('#results').html("<p>No books found.</p>");
+            $('#pagination').empty();
+            return;
+          }
+
+          showPage(1);
+          buildPagination(Math.ceil(currentBooks.length / maxResults));
+        }
+      });
+
+      $(document).on('change', '#pageSelect', function () {
+        const page = Number($(this).val());
+        showPage(page);
+      });
+    });
+
+    function showPage(page) {
+      const start = (page - 1) * maxResults;
+      const end = start + maxResults;
+      const books = currentBooks.slice(start, end);
+      const $results = $('#results');
+      $results.empty();
+
+      books.forEach(book => {
+        const info = book.volumeInfo;
+        const title = info.title || "No title";
+        const thumbnail = info.imageLinks?.thumbnail || "";
+        const id = book.id;
+
+        $results.append(`
+          <div class="book">
+            <img src="${thumbnail}" alt="Cover">
+            <a href="details.html?bookId=${id}">${title}</a>
+          </div>
+        `);
+      });
+    }
+
+    function buildPagination(totalPages) {
+      let options = '';
+      for (let i = 1; i <= totalPages; i++) {
+        options += `<option value="${i}">${i}</option>`;
+      }
+
+      $('#pagination').html(`<label>Page: <select id="pageSelect">${options}</select></label>`);
+    }
+  </script>
 </body>
 </html>
