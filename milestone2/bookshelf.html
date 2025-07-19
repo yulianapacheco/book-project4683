@@ -1,51 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>My Bookshelf</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script>
-    $(function () {
-      
-      const userId = "113973117465265140289";
-
-      
-      const shelfId = "0";
-
-      // Construct the API URL to fetch volumes
-      const url = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes`;
-
-      // Fetch books and display them on the page
-      $.getJSON(url, function (data) {
-        const books = data.items || [];
-
-        if (books.length === 0) {
-          $('#shelf').html("<p>No books found in this shelf.</p>");
-          return;
-        }
-
-        // Loop through each book and display thumbnail + title with link
-        books.forEach(book => {
-          const info = book.volumeInfo;
-          const title = info.title || "No title";
-          const thumbnail = info.imageLinks?.thumbnail || "";
-          const id = book.id;
-
-          $('#shelf').append(`
-            <div class="book">
-              <img src="${thumbnail}" alt="Cover" />
-              <a href="details.html?bookId=${id}">${title}</a>
-            </div>
-          `);
-        });
-      });
-    });
-  </script>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <!-- Top navigation links -->
   <header>
     <nav>
       <a href="../index.html">Main Home</a> |
@@ -54,10 +14,39 @@
     </nav>
   </header>
 
-  <!-- Bookshelf content -->
   <main>
     <h1>My Bookshelf</h1>
-    <div id="shelf"></div>
+    <div id="bookshelf"></div>
   </main>
+
+  <script>
+    // Reuse the same mock data
+    const books = {
+      catchingfire: {
+        title: "The Hunger Games: Catching Fire",
+        image: "https://covers.openlibrary.org/b/id/8167896-L.jpg"
+      },
+      selena: {
+        title: "To Selena, With Love",
+        image: "https://covers.openlibrary.org/b/id/8702446-L.jpg"
+      },
+      pride: {
+        title: "Pride and Prejudice",
+        image: "https://covers.openlibrary.org/b/id/8226191-L.jpg"
+      }
+    };
+
+    const bookshelfDiv = document.getElementById("bookshelf");
+
+    Object.entries(books).forEach(([id, book]) => {
+      const bookDiv = document.createElement("div");
+      bookDiv.innerHTML = `
+        <img src="${book.image}" alt="Cover image" style="height: 100px;"><br>
+        <a href="details.html?bookId=${id}">${book.title}</a>
+        <hr>
+      `;
+      bookshelfDiv.appendChild(bookDiv);
+    });
+  </script>
 </body>
 </html>
