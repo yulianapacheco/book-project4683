@@ -4,45 +4,8 @@
   <meta charset="UTF-8">
   <title>Book Details</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-  <script>
-    // Run when the page loads
-    $(function () {
-      // Grab the bookId from the URL parameters
-      const params = new URLSearchParams(window.location.search);
-      const bookId = params.get("bookId");
-
-      // If a book ID exists, fetch book details using Google Books API
-      if (bookId) {
-        const url = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
-
-        $.getJSON(url, function (data) {
-          const info = data.volumeInfo;
-          const sale = data.saleInfo;
-
-          // Build HTML with the book's details
-          $('#details').html(`
-            <h2>${info.title || "No title available"}</h2>
-            <p><strong>Authors:</strong> ${info.authors?.join(", ") || "N/A"}</p>
-            <p><strong>Publisher:</strong> ${info.publisher || "N/A"}</p>
-            <p><strong>Page Count:</strong> ${info.pageCount || "N/A"}</p>
-            <p><strong>Categories:</strong> ${info.categories?.join(", ") || "N/A"}</p>
-            <p><strong>Description:</strong> ${info.description || "No description available"}</p>
-            <p><strong>Price:</strong> ${sale.listPrice?.amount ? `$${sale.listPrice.amount}` : "Not for sale"}</p>
-            <img src="${info.imageLinks?.thumbnail || ''}" alt="Book cover">
-          `);
-        });
-      } else {
-        // If no ID in URL, show an error message
-        $('#details').html("<p>Error: No book ID found in the URL.</p>");
-      }
-    });
-  </script>
 </head>
-
 <body>
-  <!-- Navigation menu -->
   <header>
     <nav>
       <a href="../index.html">Main Home</a> |
@@ -51,10 +14,65 @@
     </nav>
   </header>
 
-  <!-- Page content -->
   <main>
     <h1>Book Details</h1>
-    <div id="details"></div> <!-- Where book info will be inserted -->
+    <div id="bookDetails"></div>
   </main>
+
+  <script>
+    // Mock data for each book
+    const books = {
+      catchingfire: {
+        title: "The Hunger Games: Catching Fire",
+        author: "Suzanne Collins",
+        publisher: "Scholastic Press",
+        description: "Katniss and Peeta's victory in the Hunger Games has sparked unrest in the districts...",
+        image: "https://covers.openlibrary.org/b/id/8167896-L.jpg"
+      },
+      selena: {
+        title: "To Selena, With Love",
+        author: "Chris Perez",
+        publisher: "Celebra",
+        description: "A heartfelt memoir from Selena's husband, recounting their love story and her tragic death.",
+        image: "https://covers.openlibrary.org/b/id/8702446-L.jpg"
+      },
+      pride: {
+        title: "Pride and Prejudice",
+        author: "Jane Austen",
+        publisher: "T. Egerton",
+        description: "Elizabeth Bennet navigates love, class, and society in 19th-century England.",
+        image: "https://covers.openlibrary.org/b/id/8226191-L.jpg"
+      }
+    };
+
+    // Helper to get bookId from URL
+    function getBookId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("bookId");
+    }
+
+    // Show book details
+    function displayBookDetails(bookId) {
+      const book = books[bookId];
+      const $details = document.getElementById("bookDetails");
+
+      if (!book) {
+        $details.innerHTML = "<p>Book not found.</p>";
+        return;
+      }
+
+      $details.innerHTML = `
+        <h2>${book.title}</h2>
+        <img src="${book.image}" alt="Cover image">
+        <p><strong>Author:</strong> ${book.author}</p>
+        <p><strong>Publisher:</strong> ${book.publisher}</p>
+        <p><strong>Description:</strong> ${book.description}</p>
+      `;
+    }
+
+    // Initialize
+    const bookId = getBookId();
+    displayBookDetails(bookId);
+  </script>
 </body>
 </html>
