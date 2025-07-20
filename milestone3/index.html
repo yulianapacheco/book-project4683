@@ -178,9 +178,48 @@
     </section>
   </main>
 
-  <!-- Include your JavaScript here (or in separate script file) -->
+  
   <script>
-    // Your existing JS code goes here...
+   
+const userId = '113973117465265140289';
+const shelfId = '2';
+
+function loadBookshelf() {
+  $("#bookshelf").html("Loading bookshelf...");
+  $("#bookDetails").empty();
+
+  const url = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes`;
+
+  $.ajax({
+    url: url,
+    method: "GET",
+    success: function (data) {
+      const books = data.items || [];
+      if (books.length === 0) {
+        $("#bookshelf").html("No books found in your bookshelf.");
+        return;
+      }
+
+      $("#bookshelf").empty();
+      books.forEach(book => {
+        const title = book.volumeInfo.title || "No Title";
+        const thumbnail = book.volumeInfo.imageLinks?.thumbnail || "";
+        const bookDiv = $('<div class="book">');
+        bookDiv.append(`<img src="${thumbnail}" alt="${title}" style="height:100px; vertical-align: middle; margin-right: 10px;">`);
+        bookDiv.append(`<span>${title}</span>`);
+        bookDiv.css("cursor", "pointer");
+        bookDiv.on("click", () => showBookDetails(book.id));
+        $("#bookshelf").append(bookDiv);
+      });
+    },
+    error: function () {
+      $("#bookshelf").html("Failed to load bookshelf.");
+    }
+  });
+}
+
+$("#loadBookshelfBtn").on("click", loadBookshelf);
+
   </script>
 </body>
 </html>
