@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Book Explorer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Book Explorer</h1>
+    <nav>
+      <a href="#">Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Search Section -->
+    <section id="search-section">
+      <input type="text" id="searchTerm" placeholder="Search for books...">
+      <button id="searchBtn">Search</button>
+    </section>
+
+    <!-- Search Results + Pagination -->
+    <section id="search-results-section">
+      <h2>Search Results</h2>
+      <div id="results"></div>
+      <div id="pagination"></div>
+    </section>
+
+    <!-- Book Details -->
+    <section id="book-details-section">
+      <h2>Book Details</h2>
+      <div id="bookDetails"></div>
+    </section>
+
+    <!-- Bookshelf -->
+    <section id="bookshelf-section">
+      <h2>My Bookshelf</h2>
+      <div id="bookshelf"></div>
+    </section>
+  </main>
+</body>
+</html>
