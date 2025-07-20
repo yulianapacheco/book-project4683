@@ -235,7 +235,7 @@
     </div>
   </script>
 
-  <!-- Book Details Template -->
+  <!-- Book Details  -->
   <script id="book-details-template" type="x-tmpl-mustache">
     <h3>{{title}}</h3>
     <p><strong>Author(s):</strong> {{authors}}</p>
@@ -410,9 +410,9 @@
         });
     }
 
-    // Load public bookshelf (mock or real)
+    // public bookshelf
     function loadBookshelf() {
-      // If already loaded, don't reload
+      
       if (bookshelfData.length > 0) {
         renderBookshelf(bookshelfData);
         return;
@@ -420,9 +420,9 @@
 
       $("#bookshelf").html("<p>Loading bookshelf...</p>");
 
-      // Sample public bookshelf (replace userId and shelfId if you want real data)
+      
       const userId = '113973117465265140289';
-      const shelfId = '2';
+      const shelfId = '3';
       const url = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes`;
 
       $.get(url)
@@ -464,7 +464,7 @@
         container.append(html);
       });
 
-      // Attach click handlers for book details
+      
       $(".bookshelf .book").off("click").on("click", function () {
         const bookId = $(this).data("id");
         showBookDetails(bookId);
