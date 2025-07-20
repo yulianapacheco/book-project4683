@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Book Explorer - Milestone 4</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px auto;
+      max-width: 900px;
+      background-color: #fff5f5;
+      color: #3b1a1a;
+    }
+    header h1 {
+      text-align: center;
+      color: #a83232;
+      margin-bottom: 30px;
+    }
+    /* Tabs */
+    #tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      gap: 20px;
+    }
+    #tabs button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #d97f7f;
+      color: white;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #tabs button.active {
+      background-color: #b35c5c;
+      cursor: default;
+    }
+    #tabs button:hover:not(.active) {
+      background-color: #b35c5c;
+    }
+
+    /* View toggle */
+    #viewToggle {
+      margin: 10px auto;
+      text-align: center;
+    }
+    #viewToggle button {
+      margin: 0 5px;
+      padding: 6px 12px;
+      border: none;
+      background-color: #d97f7f;
+      color: white;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #viewToggle button.active {
+      background-color: #b35c5c;
+      cursor: default;
+    }
+    #viewToggle button:hover:not(.active) {
+      background-color: #b35c5c;
+    }
+
+    /* Results and bookshelf containers */
+    #searchSection, #bookshelfSection {
+      display: none; /* only show active tab */
+    }
+    #searchSection.active, #bookshelfSection.active {
+      display: block;
+    }
+
+    /* Grid & List Styles */
+    .results.grid .book, .bookshelf.grid .book {
+      width: 140px;
+      display: inline-block;
+      vertical-align: top;
+      margin: 10px;
+      background-color: #fbe8e8;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(171, 84, 84, 0.3);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      text-align: center;
+    }
+    .results.grid .book:hover, .bookshelf.grid .book:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(171, 84, 84, 0.6);
+    }
+    .results.list .book, .bookshelf.list .book {
+      display: flex;
+      gap: 10px;
+      background-color: #fbe8e8;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(171, 84, 84, 0.3);
+      cursor: pointer;
+      align-items: center;
+    }
+    .results.list .book img, .bookshelf.list .book img {
+      width: 80px;
+      height: 120px;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+
+    /* Common book image */
+    .book img {
+      max-width: 100px;
+      max-height: 140px;
+      border-radius: 4px;
+    }
+
+    /* Book title in list view */
+    .results.list .book .title, .bookshelf.list .book .title {
+      font-weight: bold;
+      color: #a83232;
+      font-size: 1rem;
+    }
+
+    /* Book Details Panel */
+    #bookDetails {
+      background-color: #fdecec;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(171, 84, 84, 0.4);
+      margin-top: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      clear: both;
+    }
+    #bookDetails img {
+      max-width: 200px;
+      float: right;
+      margin-left: 15px;
+      border-radius: 6px;
+    }
+    #bookDetails h3 {
+      margin-top: 0;
+      color: #a83232;
+    }
+
+    /* Pagination */
+    #pagination {
+      text-align: center;
+      margin: 20px 0;
+    }
+    #pagination button {
+      background-color: #d97f7f;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      margin: 0 3px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #pagination button[disabled] {
+      background-color: #b35c5c;
+      cursor: default;
+    }
+    #pagination button:hover:not([disabled]) {
+      background-color: #b35c5c;
+    }
+
+  </style>
+
+  <!-- jQuery and Mustache.js CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+</head>
+<body>
+
+  <header>
+    <h1>Book Explorer</h1>
+  </header>
+
+  <main>
+
+    <!-- Tabs to toggle between Search and Bookshelf -->
+    <div id="tabs">
+      <button id="tabSearch" class="active">Search Results</button>
+      <button id="tabBookshelf">My Bookshelf</button>
+    </div>
+
+    <!-- Search Section -->
+    <section id="searchSection" class="active">
+      <div id="search-controls" style="text-align:center; margin-bottom:10px;">
+        <input type="text" id="searchTerm" placeholder="Search for books..." />
+        <button id="searchBtn">Search</button>
+      </div>
+
+      <div id="viewToggle">
+        <button id="btnGrid" class="active">Grid View</button>
+        <button id="btnList">List View</button>
+      </div>
+
+      <div id="results" class="results grid"></div>
+
+      <div id="pagination"></div>
+
+      <!-- Book Details Panel -->
+      <section id="bookDetails"></section>
+    </section>
+
+    <!-- Bookshelf Section -->
+    <section id="bookshelfSection">
+      <div id="bookshelf" class="bookshelf grid"></div>
+    </section>
+
+  </main>
+
+  <!-- Mustache templates -->
+
+  <!-- Book Item Template (for search results and bookshelf) -->
+  <script id="book-template" type="x-tmpl-mustache">
+    <div class="book" data-id="{{id}}">
+      <img src="{{thumbnail}}" alt="Cover of {{title}}" />
+      <div class="title">{{title}}</div>
+    </div>
+  </script>
+
+  <!-- List View Book Item Template -->
+  <script id="book-list-template" type="x-tmpl-mustache">
+    <div class="book" data-id="{{id}}">
+      <img src="{{thumbnail}}" alt="Cover of {{title}}" />
+      <div class="title">{{title}}</div>
+    </div>
+  </script>
+
+  <!-- Book Details Template -->
+  <script id="book-details-template" type="x-tmpl-mustache">
+    <h3>{{title}}</h3>
+    <p><strong>Author(s):</strong> {{authors}}</p>
+    <p><strong>Publisher:</strong> {{publisher}}</p>
+    <p><strong>Published Date:</strong> {{publishedDate}}</p>
+    {{#description}}
+      <p><strong>Description:</strong> {{{description}}}</p>
+    {{/description}}
+    {{#thumbnail}}
+      <img src="{{thumbnail}}" alt="Cover of {{title}}" />
+    {{/thumbnail}}
+  </script>
+
+  <script>
+    // Constants & State
+    const resultsPerPage = 10;
+    let currentQuery = "";
+    let currentPage = 1;
+    let totalItems = 0;
+    let currentResults = [];
+    let currentView = "grid"; // or 'list'
+    let bookshelfData = []; // will store public bookshelf data
+
+    // Mustache templates
+    const bookTemplate = $("#book-template").html();
+    const bookListTemplate = $("#book-list-template").html();
+    const bookDetailsTemplate = $("#book-details-template").html();
+
+    // Show Search or Bookshelf tab
+    $("#tabSearch").on("click", () => {
+      $("#tabSearch").addClass("active");
+      $("#tabBookshelf").removeClass("active");
+      $("#searchSection").addClass("active");
+      $("#bookshelfSection").removeClass("active");
+      $("#bookDetails").empty();
+    });
+    $("#tabBookshelf").on("click", () => {
+      $("#tabBookshelf").addClass("active");
+      $("#tabSearch").removeClass("active");
+      $("#bookshelfSection").addClass("active");
+      $("#searchSection").removeClass("active");
+      $("#bookDetails").empty();
+      loadBookshelf(); // load bookshelf on demand
+    });
+
+    // View toggle buttons
+    $("#btnGrid").on("click", () => {
+      if (currentView !== "grid") {
+        currentView = "grid";
+        $("#btnGrid").addClass("active");
+        $("#btnList").removeClass("active");
+        renderResults(currentResults);
+        renderBookshelf(bookshelfData);
+      }
+    });
+    $("#btnList").on("click", () => {
+      if (currentView !== "list") {
+        currentView = "list";
+        $("#btnList").addClass("active");
+        $("#btnGrid").removeClass("active");
+        renderResults(currentResults);
+        renderBookshelf(bookshelfData);
+      }
+    });
+
+    // Search button click handler
+    $("#searchBtn").on("click", () => {
+      const query = $("#searchTerm").val().trim();
+      if (query) {
+        currentQuery = query;
+        currentPage = 1;
+        searchBooks(query, 0);
+      }
+    });
+
+    // Pagination rendering & click handlers
+    function renderPagination() {
+      const pagination = $("#pagination");
+      pagination.empty();
+
+      const totalPages = Math.min(5, Math.ceil(totalItems / resultsPerPage));
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = $("<button>").text(i);
+        if (i === currentPage) {
+          btn.prop("disabled", true).addClass("active");
+          btn.css({
+            "background-color": "#ff6666",
+            "font-weight": "bold",
+            "cursor": "default"
+          });
+        } else {
+          btn.on("click", () => {
+            currentPage = i;
+            searchBooks(currentQuery, (i - 1) * resultsPerPage);
+          });
+        }
+        pagination.append(btn);
+      }
+    }
+
+    // Search books via API
+    function searchBooks(query, startIndex) {
+      $("#bookDetails").empty();
+      $("#results").html("<p>Loading...</p>");
+      $("#pagination").empty();
+
+      const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&startIndex=${startIndex}&maxResults=${resultsPerPage}`;
+      $.get(url)
+        .done((data) => {
+          totalItems = data.totalItems || 0;
+          currentResults = data.items || [];
+          renderResults(currentResults);
+          renderPagination();
+        })
+        .fail(() => {
+          $("#results").html("<p>Failed to load search results.</p>");
+        });
+    }
+
+    // Render results with Mustache based on currentView
+    function renderResults(books) {
+      const container = $("#results");
+      container.empty();
+      container.removeClass("grid list").addClass("results " + currentView);
+
+      if (books.length === 0) {
+        container.html("<p>No results found.</p>");
+        return;
+      }
+
+      books.forEach(book => {
+        const info = book.volumeInfo;
+        const data = {
+          id: book.id,
+          title: info.title || "No title",
+          thumbnail: info.imageLinks?.thumbnail || "https://via.placeholder.com/100x140?text=No+Image"
+        };
+        const html = Mustache.render(
+          currentView === "grid" ? bookTemplate : bookListTemplate,
+          data
+        );
+        container.append(html);
+      });
+
+      // Attach click handlers for details on demand
+      $(".book").off("click").on("click", function () {
+        const bookId = $(this).data("id");
+        showBookDetails(bookId);
+      });
+    }
+
+    // Show book details in the detail panel below results
+    function showBookDetails(bookId) {
+      $("#bookDetails").html("<p>Loading details...</p>");
+      const url = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
+      $.get(url)
+        .done((book) => {
+          const info = book.volumeInfo;
+          const data = {
+            title: info.title || "No title",
+            authors: info.authors ? info.authors.join(", ") : "Unknown",
+            publisher: info.publisher || "Unknown",
+            publishedDate: info.publishedDate || "Unknown",
+            description: info.description || "",
+            thumbnail: info.imageLinks?.thumbnail || ""
+          };
+          const html = Mustache.render(bookDetailsTemplate, data);
+          $("#bookDetails").html(html);
+        })
+        .fail(() => {
+          $("#bookDetails").html("<p>Failed to load book details.</p>");
+        });
+    }
+
+    // Load public bookshelf (mock or real)
+    function loadBookshelf() {
+      // If already loaded, don't reload
+      if (bookshelfData.length > 0) {
+        renderBookshelf(bookshelfData);
+        return;
+      }
+
+      $("#bookshelf").html("<p>Loading bookshelf...</p>");
+
+      // Sample public bookshelf (replace userId and shelfId if you want real data)
+      const userId = '113973117465265140289';
+      const shelfId = '2';
+      const url = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes`;
+
+      $.get(url)
+        .done((data) => {
+          bookshelfData = data.items || [];
+          if (bookshelfData.length === 0) {
+            $("#bookshelf").html("<p>No books found in bookshelf.</p>");
+            return;
+          }
+          renderBookshelf(bookshelfData);
+        })
+        .fail(() => {
+          $("#bookshelf").html("<p>Failed to load bookshelf.</p>");
+        });
+    }
+
+    // Render bookshelf items with Mustache
+    function renderBookshelf(books) {
+      const container = $("#bookshelf");
+      container.empty();
+      container.removeClass("grid list").addClass("bookshelf " + currentView);
+
+      if (books.length === 0) {
+        container.html("<p>No books in bookshelf.</p>");
+        return;
+      }
+
+      books.forEach(book => {
+        const info = book.volumeInfo;
+        const data = {
+          id: book.id,
+          title: info.title || "No title",
+          thumbnail: info.imageLinks?.thumbnail || "https://via.placeholder.com/100x140?text=No+Image"
+        };
+        const html = Mustache.render(
+          currentView === "grid" ? bookTemplate : bookListTemplate,
+          data
+        );
+        container.append(html);
+      });
+
+      // Attach click handlers for book details
+      $(".bookshelf .book").off("click").on("click", function () {
+        const bookId = $(this).data("id");
+        showBookDetails(bookId);
+      });
+    }
+
+  </script>
+</body>
+</html>
