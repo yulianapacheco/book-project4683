@@ -146,24 +146,29 @@
     }
 
     function renderPagination(query, startIndex, totalItems) {
-      const pagination = $("#pagination");
-      pagination.empty();
+  const pagination = $("#pagination");
+  pagination.empty();
 
-      const prevIndex = startIndex - 10;
-      const nextIndex = startIndex + 10;
+  const resultsPerPage = 10;
+  const totalPages = Math.min(5, Math.ceil(totalItems / resultsPerPage));
+  const currentPage = Math.floor(startIndex / resultsPerPage) + 1;
 
-      if (prevIndex >= 0) {
-        const prevBtn = $("<button>").text("Previous");
-        prevBtn.on("click", () => searchBooks(query, prevIndex));
-        pagination.append(prevBtn);
-      }
-
-      if (nextIndex < totalItems) {
-        const nextBtn = $("<button>").text("Next");
-        nextBtn.on("click", () => searchBooks(query, nextIndex));
-        pagination.append(nextBtn);
-      }
+  for (let i = 1; i <= totalPages; i++) {
+    const btn = $("<button>").text(i);
+    if (i === currentPage) {
+      btn.css({
+        "background-color": "#ff6666",
+        "font-weight": "bold",
+        "cursor": "default"
+      });
+      btn.prop("disabled", true);
+    } else {
+      btn.on("click", () => searchBooks(query, (i - 1) * resultsPerPage));
     }
+    pagination.append(btn);
+  }
+}
+
 
     function showBookDetails(bookId) {
       const url = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
