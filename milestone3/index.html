@@ -1,225 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Book Explorer</title>
   <style>
-    /* Base styles */
     body {
       font-family: Arial, sans-serif;
-      margin: 20px auto;
-      max-width: 900px;
-      background-color: #fff5f5; /* light red shade */
-      color: #3b1a1a;
+      margin: 0;
+      padding: 0;
+      background-color: #ffe5e5; /* light red background */
+      color: #333;
     }
 
-    header h1 {
+    header {
+      background-color: #ffcccc;
+      padding: 1rem;
       text-align: center;
-      color: #a83232;
-      margin-bottom: 30px;
     }
 
-    #search-section {
-      text-align: center;
-      margin-bottom: 20px;
+    h1 {
+      margin: 0;
     }
 
-    #searchTerm {
-      width: 60%;
-      padding: 10px;
-      font-size: 1rem;
-      border: 1px solid #d97f7f;
-      border-radius: 4px;
+    main {
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 1rem;
     }
 
-    #searchBtn {
-      padding: 10px 20px;
-      background-color: #d97f7f;
-      border: none;
-      color: white;
-      font-weight: bold;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-left: 10px;
-      transition: background-color 0.3s ease;
-    }
-    #searchBtn:hover {
-      background-color: #b35c5c;
+    section {
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
 
-    /* Results and bookshelf styling */
+    #searchSection input, button {
+      padding: 0.5rem;
+      margin-right: 0.5rem;
+    }
+
     #results, #bookshelf {
       display: flex;
       flex-wrap: wrap;
-      gap: 15px;
-      justify-content: center;
+      gap: 1rem;
     }
 
     .book {
-      background-color: #fbe8e8;
-      padding: 10px;
-      width: 140px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(171, 84, 84, 0.3);
+      width: 100px;
       cursor: pointer;
       text-align: center;
-      transition: transform 0.2s ease;
-    }
-    .book:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(171, 84, 84, 0.6);
     }
 
     .book img {
-      max-width: 100px;
-      max-height: 140px;
-      margin-bottom: 8px;
+      width: 100%;
+      height: auto;
       border-radius: 4px;
     }
 
-    /* Pagination buttons */
     #pagination {
+      margin-top: 1rem;
       text-align: center;
-      margin: 20px 0;
     }
+
     #pagination button {
-      background-color: #d97f7f;
+      margin: 0 5px;
+      padding: 5px 10px;
       border: none;
-      color: white;
-      padding: 8px 12px;
-      margin: 0 3px;
-      font-weight: bold;
       border-radius: 4px;
+      background-color: #ff9999;
+      color: white;
       cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    #pagination button[disabled] {
-      background-color: #b35c5c;
-      cursor: default;
-    }
-    #pagination button:hover:not([disabled]) {
-      background-color: #b35c5c;
     }
 
-    /* Book details */
-    #bookDetails {
-      background-color: #fdecec;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(171, 84, 84, 0.4);
-      margin-top: 30px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+    #pagination button:hover {
+      background-color: #ff6666;
     }
+
     #bookDetails img {
-      max-width: 200px;
-      float: right;
-      margin-left: 15px;
-      border-radius: 6px;
-    }
-    #bookDetails h3 {
-      margin-top: 0;
-      color: #a83232;
-    }
-
-    /* Bookshelf Section */
-    #bookshelf-section {
-      margin-top: 40px;
-    }
-    #loadBookshelfBtn {
-      background-color: #d97f7f;
-      border: none;
-      color: white;
-      padding: 10px 20px;
-      font-weight: bold;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      display: block;
-      margin: 0 auto 20px auto;
-    }
-    #loadBookshelfBtn:hover {
-      background-color: #b35c5c;
+      max-width: 150px;
+      margin-bottom: 10px;
     }
   </style>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
+
   <header>
     <h1>Book Explorer</h1>
   </header>
 
   <main>
-    <!-- Search Section -->
-    <section id="search-section">
-      <input type="text" id="searchTerm" placeholder="Search for books..." />
+    <!-- Left: Search -->
+    <section id="searchSection">
+      <h2>Search Books</h2>
+      <input type="text" id="searchTerm" placeholder="Enter search term...">
       <button id="searchBtn">Search</button>
-    </section>
-
-    <!-- Search Results + Pagination -->
-    <section id="search-results-section">
-      <h2>Search Results</h2>
       <div id="results"></div>
       <div id="pagination"></div>
     </section>
 
-    <!-- Book Details -->
-    <section id="book-details-section">
+    <!-- Center: Book Details -->
+    <section>
       <h2>Book Details</h2>
       <div id="bookDetails"></div>
     </section>
 
-    <!-- Bookshelf -->
-    <section id="bookshelf-section">
+    <!-- Right: Bookshelf -->
+    <section>
       <h2>My Bookshelf</h2>
-      <button id="loadBookshelfBtn">Load My Bookshelf</button>
       <div id="bookshelf"></div>
     </section>
   </main>
 
-  
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
-   
-const userId = '113973117465265140289';
-const shelfId = '2';
+    // Search books with Google API
+    function searchBooks(query, startIndex = 0) {
+      $("#results").html("Searching...");
+      $("#bookDetails").empty();
 
-function loadBookshelf() {
-  $("#bookshelf").html("Loading bookshelf...");
-  $("#bookDetails").empty();
+      const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&startIndex=${startIndex}&maxResults=10`;
 
-  const url = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes`;
+      $.get(url, function(data) {
+        const books = data.items || [];
+        $("#results").empty();
 
-  $.ajax({
-    url: url,
-    method: "GET",
-    success: function (data) {
-      const books = data.items || [];
-      if (books.length === 0) {
-        $("#bookshelf").html("No books found in your bookshelf.");
-        return;
+        if (books.length === 0) {
+          $("#results").html("No books found.");
+          return;
+        }
+
+        books.forEach(book => {
+          const title = book.volumeInfo.title || "No Title";
+          const thumbnail = book.volumeInfo.imageLinks?.thumbnail || "";
+          const bookDiv = $('<div class="book">');
+          bookDiv.append(`<img src="${thumbnail}" alt="${title}">`);
+          bookDiv.append(`<span>${title}</span>`);
+          bookDiv.on("click", () => showBookDetails(book.id));
+          $("#results").append(bookDiv);
+        });
+
+        renderPagination(query, startIndex, data.totalItems);
+      });
+    }
+
+    function renderPagination(query, startIndex, totalItems) {
+      const pagination = $("#pagination");
+      pagination.empty();
+
+      const prevIndex = startIndex - 10;
+      const nextIndex = startIndex + 10;
+
+      if (prevIndex >= 0) {
+        const prevBtn = $("<button>").text("Previous");
+        prevBtn.on("click", () => searchBooks(query, prevIndex));
+        pagination.append(prevBtn);
       }
 
+      if (nextIndex < totalItems) {
+        const nextBtn = $("<button>").text("Next");
+        nextBtn.on("click", () => searchBooks(query, nextIndex));
+        pagination.append(nextBtn);
+      }
+    }
+
+    function showBookDetails(bookId) {
+      const url = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
+
+      $.get(url, function(book) {
+        const info = book.volumeInfo;
+        const title = info.title || "No Title";
+        const authors = info.authors ? info.authors.join(", ") : "Unknown Author";
+        const description = info.description || "No description available.";
+        const thumbnail = info.imageLinks?.thumbnail || "";
+
+        const html = `
+          <img src="${thumbnail}" alt="${title}">
+          <h3>${title}</h3>
+          <p><strong>Author(s):</strong> ${authors}</p>
+          <p>${description}</p>
+        `;
+
+        $("#bookDetails").html(html);
+      });
+    }
+
+    // Use mock bookshelf data for now
+    const mockBookshelf = [
+      {
+        id: "book1",
+        title: "Pride and Prejudice",
+        thumbnail: "https://covers.openlibrary.org/b/id/8228691-M.jpg"
+      },
+      {
+        id: "book2",
+        title: "To Kill a Mockingbird",
+        thumbnail: "https://covers.openlibrary.org/b/id/9874063-M.jpg"
+      },
+      {
+        id: "book3",
+        title: "1984",
+        thumbnail: "https://covers.openlibrary.org/b/id/7222246-M.jpg"
+      }
+    ];
+
+    function loadBookshelf() {
       $("#bookshelf").empty();
-      books.forEach(book => {
-        const title = book.volumeInfo.title || "No Title";
-        const thumbnail = book.volumeInfo.imageLinks?.thumbnail || "";
+      mockBookshelf.forEach(book => {
         const bookDiv = $('<div class="book">');
-        bookDiv.append(`<img src="${thumbnail}" alt="${title}" style="height:100px; vertical-align: middle; margin-right: 10px;">`);
-        bookDiv.append(`<span>${title}</span>`);
-        bookDiv.css("cursor", "pointer");
-        bookDiv.on("click", () => showBookDetails(book.id));
+        bookDiv.append(`<img src="${book.thumbnail}" alt="${book.title}">`);
+        bookDiv.append(`<span>${book.title}</span>`);
+        bookDiv.on("click", () => searchBooks(book.title));
         $("#bookshelf").append(bookDiv);
       });
-    },
-    error: function () {
-      $("#bookshelf").html("Failed to load bookshelf.");
     }
-  });
-}
 
-$("#loadBookshelfBtn").on("click", loadBookshelf);
+    // Initialize
+    $(document).ready(function () {
+      $("#searchBtn").on("click", function () {
+        const query = $("#searchTerm").val().trim();
+        if (query) searchBooks(query);
+      });
 
+      loadBookshelf();
+    });
   </script>
 </body>
 </html>
